@@ -21,7 +21,7 @@ struct log_file {
 /**
 * 初始化logger
 */
-struct log_file* log_init(const char* log_file);
+struct log_file* log_init(char* log_file);
 
 /**
 * 日志打印

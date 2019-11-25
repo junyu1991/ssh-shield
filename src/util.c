@@ -2,9 +2,9 @@
 
 long string_length(const char *string)
 {
-	long i = 0;
-	while(string[i++] != '\0');
-	return i;
+	//long i = 0;
+	//while(string[i++] != '\0');
+	return strlen(string);
 }
 
 char * now_time_str() {

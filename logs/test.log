@@ -1,0 +1,6 @@
+[debug] [2019-11-25 23:00:43] ./ssh-shield(caller_info+0x38) [0x564c74fb93e1] : DEBUG message
+[info] [2019-11-25 23:00:43] ./ssh-shield(caller_info+0x38) [0x564c74fb93e1] : INFO message
+[error] [2019-11-25 23:00:43] ./ssh-shield(caller_info+0x38) [0x564c74fb93e1] : ERROR message
+[warn] [2019-11-25 23:00:43] ./ssh-shield(caller_info+0x38) [0x564c74fb93e1] : WARN message
+[fatal] [2019-11-25 23:00:43] ./ssh-shield(caller_info+0x38) [0x564c74fb93e1] : FATA message
+[unknown] [2019-11-25 23:00:43] ./ssh-shield(caller_info+0x38) [0x564c74fb93e1] : FATA message
