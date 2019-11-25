@@ -2,27 +2,32 @@
 #define SQLITEHEADER
 
 //攻击者ip缓存表，用于对攻击ip进行计数
-struct {
+struct attack_ip_cache {
 	char *username; //攻击者使用的用户名
 	char *ip; //攻击者的ip
 	int count; //攻击者的试错次数
 	long start_time; //攻击者开始攻击的时间
-} attack_ip_cache;
+};
 
 //已添加到防火墙黑名单中ip
-struct {
+struct block_ip_table {
 	char *ip; //攻击者ip
 	long block_time; //攻击者被添加到黑名单中的时间
-} block_ip_table;
+};
 
 //用于保存所有被添加到过黑名单中的攻击者ip信息
-struct {
+struct attack_ip {
 	char *username; //攻击者使用的用户名
 	char *ip; //攻击者的ip
 	int count; //攻击者的试错次数
 	long start_time; //攻击者开始攻击的时间
 	long add_time; //攻击者被添加到黑名单中的时间
-} attack_ip;
+};
+
+/**
+* 初始化数据库：连接数据库，若表不存在则创建表
+*/
+void init_database();
 
 //从数据库中查询需要从防火墙黑名单删除的ip
 void get_ip2remove(char **ips);
