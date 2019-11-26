@@ -1,18 +1,24 @@
 #include "all_headers.h"
 
-struct log_file* log_init(char* log_file) {
-	struct log_file* log = (struct log_file*)malloc(sizeof(struct log_file));
+static struct log_file *logconfig;
+static int log_init = -1;
+
+void log_init(char* log_file) {
+	if(log_init) {
+		fprintf(stderr, "log has already initialized.", "");
+		return;
+	}
+	logconfig = (struct log_file*)malloc(sizeof(struct log_file));
 	//fmt = [debug-level] [log-time] caller-info: message
-	char *fmt = "[%s] [%s] %s : %s\n";
+	char *fmt = "[%s] %s %s : %s\n";
 	int file_fd = open(log_file, O_WRONLY|O_APPEND|O_CREAT, 0666);
 	if(file_fd < 0) {
 		perror("open");
-		return log;
 	}
-	log->file_fd = file_fd;
-	log->fmt = fmt;
-	log->log_file = log_file;
-	return log;
+	logconfig->file_fd = file_fd;
+	logconfig->fmt = fmt;
+	logconfig->log_file = log_file;
+	log_init = 1;
 }
 
 int write_to_file(char *message, int log_file) {
@@ -22,7 +28,7 @@ int write_to_file(char *message, int log_file) {
 }
 
 
-void log_write(char *message, enum LEVEL level, const struct log_file *logconfig) {
+void log_write(char *message, enum LEVEL level) {
 	
 	char *time_str = now_time_str();
 	char *caller = caller_info();
@@ -54,8 +60,9 @@ void log_write(char *message, enum LEVEL level, const struct log_file *logconfig
 			s = (char *)malloc(sizeof(char) * (total_size + 5));
 			sprintf(s, logconfig->fmt, "fatal", time_str, caller, message);
 			write_to_file(s, logconfig->file_fd);
+			break;
 		default:
-			perror("Unknown debug level.");
+			fprintf(stderr, "Unknown debug level:%d", level);
 			s = (char *)malloc(sizeof(char) * (total_size + 6));
 			sprintf(s, logconfig->fmt, "unknown", time_str, caller, message);
 			write_to_file(s, logconfig->file_fd);
@@ -68,9 +75,9 @@ void log_write(char *message, enum LEVEL level, const struct log_file *logconfig
 	free(s);
 }
 
-void close_log(struct log_file *log) {
-	if(log!=NULL && log->file_fd > 0){
-		close(log->file_fd);
+void close_log() {
+	if(logconfig!=NULL && logconfig->file_fd > 0){
+		close(logconfig->file_fd);
 	}
-	free(log);
+	free(logconfig);
 }

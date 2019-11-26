@@ -9,6 +9,9 @@
 #include <time.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
+#include <poll.h>
+#include <sys/inotify.h>
 
 #include "notify.h"
 #include "firewall_util.h"
