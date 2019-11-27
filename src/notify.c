@@ -1,12 +1,13 @@
 #include "all_headers.h"
 
-static void handle_events(int fd, int *wd, int argc, char *argv[])
+static void handle_events(int fd, const struct notify_file notify_files[])
 {
 	char buf[4096] __attribute__ ((aligned(__alignof__(struct inotify_event))));
 	const struct inotify_event *event;
 	int i;
-	ssize_t len;
+	//ssize_t len;
 	char *ptr;
+	int files_length = sizeof(notify_files) / sizeof(struct notify_file);
 
 	for(;;) {
 		len = read(fd, buf, sizeof buf);
@@ -20,7 +21,15 @@ static void handle_events(int fd, int *wd, int argc, char *argv[])
 		for(ptr=buf;ptr<buf+len;ptr+=sizeof(struct inotify_event)+event->len) {
 			event = (const struct inotify_event *)ptr;
 			if(event->mask & IN_CLOSE_WRITE) {
-				log_write("IN_CLOSE_WRITE: ", INFO);
+//				log_write("IN_CLOSE_WRITE: ", INFO);
+				for(i=0;i<files_length;i++) {
+					if(notify_files[i].wd == event->wd) {
+						log_write("IN_CLOSE_WRITE: %s", notify_files[i].pathname);
+						if(strcmp(BTMP, notify_files[i].pathname)==0) {
+							log_write("IN_CLOSE_WRITE btmp");
+						}
+					}
+				}
 				
 			}
 		}
@@ -69,5 +78,19 @@ void start()
 	log_write("Start inotify epoll listening..");
 	while(1) {
 		poll_num = poll(fds, nfds, -1);
+		if(poll_num == -1) {
+			if(errno == EINTR)
+				continue;
+			log_write("poll inotify event error");
+			exit(EXIT_FAILURE);
+		}
+
+		if(poll_num > 0) {
+			if(poll_fd.revents & POLLIN) {
+				handle_events(fd);
+			}
+		}
 	}
+
+	close(fd);
 }
