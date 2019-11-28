@@ -17,4 +17,6 @@ char * now_time_str();
 * 编译时需要-rdynamic参数，如：cc -rdynamic prog.c -o prog
 */
 char * caller_info();
+
+
 #endif
