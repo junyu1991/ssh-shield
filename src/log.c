@@ -1,10 +1,10 @@
 #include "all_headers.h"
 
 static struct log_file *logconfig;
-static int log_init = -1;
+static int log_inited = -1;
 
 void log_init(char* log_file) {
-	if(log_init) {
+	if(log_inited) {
 		fprintf(stderr, "log has already initialized.", "");
 		return;
 	}
@@ -18,7 +18,7 @@ void log_init(char* log_file) {
 	logconfig->file_fd = file_fd;
 	logconfig->fmt = fmt;
 	logconfig->log_file = log_file;
-	log_init = 1;
+	log_inited = 1;
 }
 
 int write_to_file(char *message, int log_file) {

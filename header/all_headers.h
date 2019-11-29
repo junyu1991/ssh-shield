@@ -18,5 +18,6 @@
 #include "sqlite.h"
 #include "log.h"
 #include "util.h"
+#include "list.h"
 
 #endif

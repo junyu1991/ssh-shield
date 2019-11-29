@@ -33,12 +33,12 @@ struct node* get(int index, struct node* root);
 /**
 * 删除链表末尾值，并返回被删除的值
 */
-void* pop(struct node* root);
+struct node* pop(struct node* root);
 
 /**
 * 删除链表指定位置的值，并返回被删除的值
 */
-void* delete_index(struct node* root, int index);
+struct node* delete_index(struct node* root, int index);
 
 /**
 * 查看链表末尾值
@@ -48,13 +48,16 @@ struct node* peek(struct node* root);
 /**
 * 删除链表中的所有节点值，但链表还可继续使用
 */
-int delete_all(struct node* root);
+int delete_all_node(struct node* root);
 
 /**
 * 删除链表，释放链表的占用的所有资源
 */
-int delete_list(struct node* root);
+//int delete_list(struct node* root);
 
-
+/**
+ * 打印链表信息
+ * */
+void print_list_info(struct node* root);
 
 #endif
